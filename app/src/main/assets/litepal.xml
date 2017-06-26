@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Litepal>
+    <dbname value="WeiLaiWeatherDB"/>
+    <version value="1"/>
+    <Lits>
+        <mapping class="com.weilaiweather.android.db.Province"></mapping>
+        <mapping class="com.weilaiweather.android.db.City"></mapping>
+        <mapping class="com.weilaiweather.android.db.County"></mapping>
+    </Lits>
+</Litepal>

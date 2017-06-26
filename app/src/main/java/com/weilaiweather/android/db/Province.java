@@ -1,5 +1,6 @@
 package com.weilaiweather.android.db;
 
+
 import org.litepal.crud.DataSupport;
 
 /**
@@ -7,14 +8,14 @@ import org.litepal.crud.DataSupport;
  * 存放省份信息
  */
 
-public class Province extends DataSupport{
+public class Province extends DataSupport {
 
     // 省份id
     private int id;
     //  省份名
     private String provinceName;
     // 省份代号
-    private int provinceCore;
+    private int provinceCode;
 
     public int getId() {
         return id;
@@ -32,11 +33,11 @@ public class Province extends DataSupport{
         this.provinceName = provinceName;
     }
 
-    public int getProvinceCore() {
-        return provinceCore;
+    public int getProvinceCode() {
+        return provinceCode;
     }
 
-    public void setProvinceCore(int provinceCore) {
-        this.provinceCore = provinceCore;
+    public void setProvinceCode(int provinceCode) {
+        this.provinceCode = provinceCode;
     }
 }
