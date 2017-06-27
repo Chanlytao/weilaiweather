@@ -1,10 +1,13 @@
 package com.weilaiweather.android.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.google.gson.Gson;
 import com.weilaiweather.android.db.City;
 import com.weilaiweather.android.db.County;
 import com.weilaiweather.android.db.Province;
+import com.weilaiweather.android.gsons.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +18,8 @@ import org.json.JSONObject;
  */
 
 public class Utility {
+
+    private static final String TAG = "Utility";
 
     /**
      * 解析和处理服务器返回的省级数据
@@ -82,5 +87,23 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    /**
+     * 将返回的JSon数据解析成weather实体类
+     * @param response
+     * @return
+     */
+    public static Weather handleWeatherResponse(String response){
+        Log.e(TAG, "handleWeatherResponse: "+response);
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather5");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
