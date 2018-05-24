@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.weilaiweather.android.gsons.DailyForecast;
+import com.weilaiweather.android.gsons.DailyForecastBean;
 import com.weilaiweather.android.gsons.Weather;
 import com.weilaiweather.android.util.HttpUtil;
 import com.weilaiweather.android.util.Utility;
@@ -38,6 +39,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView carWashText;
     private TextView sportText;
 
+    private Button backBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,7 @@ public class WeatherActivity extends AppCompatActivity {
         comfortText = (TextView) findViewById(R.id.comfort_text);
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
+        backBtn = (Button) findViewById(R.id.wer_back_button);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = prefs.getString("weather", null);
@@ -92,7 +96,7 @@ public class WeatherActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (wrathers != null && "ok".equals(wrathers.status)) {
+                        if (wrathers != null && "ok".equals(wrathers.getStatus())) {
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather", responseText);
                             editor.apply();
@@ -107,38 +111,41 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void showWeatherInfo(Weather weather) {
-        String cityName = weather.basic.city;
-        String updateTime = weather.basic.update.loc.split(" ")[1];
+        String cityName = weather.getBasic().getCity();
+        String updateTime = weather.getBasic().getUpdate().getLoc().split(" ")[1];
         Log.e(TAG, "showWeatherInfo: "+updateTime);
-        String degree = weather.now.tmp + "℃";
-        String weatherInfo = weather.now.cond.txt;
+        String degree = weather.getNow().getTmp() + "℃";
+        String weatherInfo = weather.getNow().getCond().getTxt();
         textCity.setText(cityName);
         textUpdateText.setText(updateTime);
         degreeText.setText(degree);
         weatherInfoText.setText(weatherInfo);
         forcastLayout.removeAllViews();
-        for (DailyForecast d : weather.dailyForecastList) {
+        for (DailyForecastBean d : weather.getDaily_forecast()) {
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forcastLayout, false);
             TextView dateText = (TextView) view.findViewById(R.id.date_text);
             TextView infoText = (TextView) view.findViewById(R.id.info_text);
             TextView maxText = (TextView) view.findViewById(R.id.max_text);
             TextView minText = (TextView) view.findViewById(R.id.min_text);
-            dateText.setText(d.date);
-            infoText.setText(d.cond.txt_d);
-            maxText.setText(d.tmp.max);
-            minText.setText(d.tmp.min);
+            dateText.setText(d.getDate());
+            infoText.setText(d.getCond().getTxt_d());
+            maxText.setText(d.getTmp().getMax());
+            minText.setText(d.getTmp().getMin());
             forcastLayout.addView(view);
         }
-        if (weather.aqi != null) {
-            aqiText.setText(weather.aqi.city.aqi);
-            pm25Text.setText(weather.aqi.city.pm25);
+        if (weather.getAqi() != null) {
+            aqiText.setText(weather.getAqi().getCity().getAqi());
+            pm25Text.setText(weather.getAqi().getCity().getPm25());
         }
-        String comfort = "舒适度" + weather.suggestion.comf.txt;
-        String carWash = "洗车指数" + weather.suggestion.cw.txt;
-        String sport = "运动建议" + weather.suggestion.sport.txt;
+        String comfort = "舒适度" + weather.getSuggestion().getComf().getTxt();
+        String carWash = "洗车指数" + weather.getSuggestion().getCw().getTxt();
+        String sport = "运动建议" + weather.getSuggestion().getSport().getTxt();
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);
         scrollView.setVisibility(View.VISIBLE);
     }
+
+
+
 }
