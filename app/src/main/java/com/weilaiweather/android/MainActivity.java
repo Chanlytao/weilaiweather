@@ -19,12 +19,19 @@ public class MainActivity extends AppCompatActivity {
         fragment = findViewById(R.id.choose_area_fragment);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        if (prefs.getString("weather", null) != null) {
-//            Intent intent = new Intent(this, WeatherActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
+//        Intent intent = new Intent(this,WeatherActivity.class);
+//
+//        startActivity(intent);
+        if (prefs.getString("weather", null) != null) {
+            Intent intent = new Intent(this, WeatherActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+    }
 }
